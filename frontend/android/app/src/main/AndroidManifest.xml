@@ -33,7 +33,7 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAJXjHk7MV27ZmKKE1-0DvnrMByRIoMjq0" />
+            android:value="${MAP_API_KEY}" />
         <meta-data
             android:name="com.google.android.gms.maps.useViewLifecycleInFragment"
             android:value="true"/>
