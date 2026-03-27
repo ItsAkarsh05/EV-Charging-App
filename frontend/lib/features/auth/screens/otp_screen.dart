@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../providers/auth_provider.dart';
-import '../../home/screens/home_screen.dart';
+import '../../shell/main_shell.dart';
 
 class OTPScreen extends ConsumerStatefulWidget {
   const OTPScreen({super.key});
@@ -106,7 +106,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen>
         );
         // Navigate to home screen
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const MainShell()),
           (route) => false,
         );
       }
@@ -145,116 +145,122 @@ class _OTPScreenState extends ConsumerState<OTPScreen>
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnim,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-
-                // ─── Title ───────────────────────────────
-                Text('Verify your\nphone number', style: AppTextStyles.displayMedium),
-                const SizedBox(height: 12),
-                Text(
-                  'We\'ve sent a 6-digit code to $phone',
-                  style: AppTextStyles.bodyMedium,
-                ),
-
-                const SizedBox(height: 40),
-
-                // ─── OTP Fields ──────────────────────────
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(6, (i) {
-                    return SizedBox(
-                      width: 50,
-                      height: 60,
-                      child: TextFormField(
-                        controller: _controllers[i],
-                        focusNode: _focusNodes[i],
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.otpDigit,
-                        maxLength: 1,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: InputDecoration(
-                          counterText: '',
-                          contentPadding: EdgeInsets.zero,
-                          filled: true,
-                          fillColor: _controllers[i].text.isNotEmpty
-                              ? AppColors.primarySurface
-                              : AppColors.surfaceVariant,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: const BorderSide(
-                              color: AppColors.primary,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                        onChanged: (val) => _onChanged(val, i),
-                      ),
-                    );
-                  }),
-                ),
-
-                const SizedBox(height: 32),
-
-                // ─── Verify Button ───────────────────────
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: authState.status == AuthStatus.loading ||
-                            _otp.length < 6
-                        ? null
-                        : () =>
-                            ref.read(authProvider.notifier).verifyOTP(_otp),
-                    child: authState.status == AuthStatus.loading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              color: AppColors.textOnPrimary,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                        : const Text('Verify & Continue'),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24), // Reduced horizontal padding slightly
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+  
+                  // ─── Title ───────────────────────────────
+                  Text('Verify your\nphone number', style: AppTextStyles.displayMedium),
+                  const SizedBox(height: 12),
+                  Text(
+                    'We\'ve sent a 6-digit code to $phone',
+                    style: AppTextStyles.bodyMedium,
                   ),
-                ),
-
-                const SizedBox(height: 28),
-
-                // ─── Resend ──────────────────────────────
-                Center(
-                  child: _canResend
-                      ? TextButton(
-                          onPressed: _onResend,
-                          child: const Text('Resend OTP'),
-                        )
-                      : RichText(
-                          text: TextSpan(
-                            text: 'Resend code in ',
-                            style: AppTextStyles.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text:
-                                    '00:${_secondsRemaining.toString().padLeft(2, '0')}',
-                                style: AppTextStyles.labelMedium.copyWith(
-                                  color: AppColors.primary,
-                                ),
+  
+                  const SizedBox(height: 40),
+  
+                  // ─── OTP Fields ──────────────────────────
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(6, (i) {
+                      return SizedBox(
+                        // Reduced fixed width from 50 to 45 so they fit perfectly in screens down to 320px
+                        width: MediaQuery.of(context).size.width < 380 ? 44 : 50,
+                        height: 60,
+                        child: TextFormField(
+                          controller: _controllers[i],
+                          focusNode: _focusNodes[i],
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.otpDigit,
+                          maxLength: 1,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(
+                            counterText: '',
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: _controllers[i].text.isNotEmpty
+                                ? AppColors.primarySurface
+                                : AppColors.surfaceVariant,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.primary,
+                                width: 1.5,
                               ),
-                            ],
+                            ),
                           ),
+                          onChanged: (val) => _onChanged(val, i),
                         ),
-                ),
-              ],
+                      );
+                    }),
+                  ),
+  
+                  const SizedBox(height: 32),
+  
+                  // ─── Verify Button ───────────────────────
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: authState.status == AuthStatus.loading ||
+                              _otp.length < 6
+                          ? null
+                          : () =>
+                              ref.read(authProvider.notifier).verifyOTP(_otp),
+                      child: authState.status == AuthStatus.loading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: AppColors.textOnPrimary,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Text('Verify & Continue'),
+                    ),
+                  ),
+  
+                  const SizedBox(height: 28),
+  
+                  // ─── Resend ──────────────────────────────
+                  Center(
+                    child: _canResend
+                        ? TextButton(
+                            onPressed: _onResend,
+                            child: const Text('Resend OTP'),
+                          )
+                        : RichText(
+                            text: TextSpan(
+                              text: 'Resend code in ',
+                              style: AppTextStyles.bodyMedium,
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '00:${_secondsRemaining.toString().padLeft(2, '0')}',
+                                  style: AppTextStyles.labelMedium.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+                  
+                  // Bottom padding for keyboard
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           ),
         ),

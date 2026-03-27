@@ -56,8 +56,8 @@ class AppTextStyles {
 
   static TextStyle bodySmall = GoogleFonts.plusJakartaSans(
     fontSize: 12,
-    fontWeight: FontWeight.w400,
-    color: AppColors.textTertiary,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textSecondary,
     height: 1.4,
   );
 

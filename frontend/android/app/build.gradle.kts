@@ -38,15 +38,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-
-        // Load .env properties manually
-        val envFile = project.rootProject.file("../../.env")
-        val properties = java.util.Properties()
-        if (envFile.exists()) {
-            properties.load(java.io.FileInputStream(envFile))
-        }
-        val mapApiKey = properties.getProperty("MAP_API_KEY") ?: ""
-        manifestPlaceholders["MAP_API_KEY"] = mapApiKey
     }
 
     buildTypes {

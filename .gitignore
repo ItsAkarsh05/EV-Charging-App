@@ -2,16 +2,11 @@
 .env
 .env.*
 
-# Android Secrets & Keystores
-**/key.properties
-**/*.jks
-**/*.keystore
-
-# Firebase & Google Services Configs (Optional but recommended to prevent leaking project IDs and Keys)
-**/google-services.json
-**/GoogleService-Info.plist
-
-# IDE & Editor files
-.vscode/
+# IDE
 .idea/
+.vscode/
+*.iml
+
+# OS
 .DS_Store
+Thumbs.db
