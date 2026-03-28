@@ -24,6 +24,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
   // Polling
   Timer? _pollTimer;
   DateTime? _lastUpdated;
+  int _pollFailures = 0;
   static const _pollInterval = Duration(seconds: 30);
 
   final List<String> _imagePaths = const [
@@ -53,10 +54,14 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
         setState(() {
           _station = updated;
           _lastUpdated = DateTime.now();
+          _pollFailures = 0;
         });
       }
     } catch (_) {
-      // Silently ignore poll failures — keep showing last data
+      // Keep showing last data, but track failures for indicator
+      if (mounted) {
+        setState(() => _pollFailures++);
+      }
     }
   }
 
@@ -82,8 +87,27 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Back button
-                    _buildBackButton(),
+                    // Back button + save button
+                    Row(
+                      children: [
+                        _buildBackButton(),
+                        Spacer(),
+                        IconButton(
+                          icon: Container(
+                            padding: const EdgeInsets.all(8),
+
+                            child: const Icon(
+                              Icons.bookmark_border_outlined,
+                              color: AppColors.textPrimary,
+                              size: 20,
+                            ),
+                          ),
+                          onPressed: () {
+                            // TODO: save
+                          },
+                        ),
+                      ],
+                    ),
 
                     // Station name & address
                     _buildStationHeader(station),
@@ -112,16 +136,26 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.refresh_rounded,
-                              size: 14,
-                              color: AppColors.textTertiary,
+                              _pollFailures >= 2
+                                  ? Icons.cloud_off_rounded
+                                  : Icons.circle,
+                              size: _pollFailures >= 2 ? 14 : 8,
+                              color: _pollFailures >= 2
+                                  ? AppColors.warning
+                                  : AppColors.primary,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Live · updates every 30s · ${_formatTime(_lastUpdated!)}',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.textTertiary,
-                                fontSize: 11,
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                _pollFailures >= 2
+                                    ? 'Connection lost · last update ${_formatTime(_lastUpdated!)}'
+                                    : 'Live · updates every 30s · ${_formatTime(_lastUpdated!)}',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: _pollFailures >= 2
+                                      ? AppColors.warning
+                                      : AppColors.textTertiary,
+                                  fontSize: 11,
+                                ),
                               ),
                             ),
                           ],
@@ -162,7 +196,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
               'Back',
               style: AppTextStyles.bodyLarge.copyWith(
                 color: AppColors.textPrimary,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
@@ -300,8 +334,9 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
         children: [
           Text(
             'Facilities Available',
-            style: AppTextStyles.headlineSmall.copyWith(
-              fontWeight: FontWeight.w800,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 12),

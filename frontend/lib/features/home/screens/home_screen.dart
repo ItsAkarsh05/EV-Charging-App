@@ -22,7 +22,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Set<Marker> _markers = {};
   int _selectedStationIndex = 0;
   final PageController _pageController = PageController(viewportFraction: 0.88);
-  final DraggableScrollableController _sheetController = DraggableScrollableController();
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
   BitmapDescriptor? _customMarkerIcon;
 
   @override
@@ -68,7 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         circleRadius * 1.2,
         [
           const Color(0xFF3DDC64), // brighter green highlight
-          AppColors.primary,       // main green
+          AppColors.primary, // main green
           const Color(0xFF1E9637), // darker green edge
         ],
         [0.0, 0.5, 1.0],
@@ -82,7 +83,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // ── Bottom pointer triangle ──
     final pointerPath = Path();
     pointerPath.moveTo(circleCenterX - 7, circleCenterY + circleRadius - 2);
-    pointerPath.lineTo(circleCenterX, circleCenterY + circleRadius + pointerHeight);
+    pointerPath.lineTo(
+      circleCenterX,
+      circleCenterY + circleRadius + pointerHeight,
+    );
     pointerPath.lineTo(circleCenterX + 7, circleCenterY + circleRadius - 2);
     pointerPath.close();
 
@@ -95,7 +99,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Green fill for pointer (slightly inset)
     final pointerFillPath = Path();
     pointerFillPath.moveTo(circleCenterX - 5, circleCenterY + circleRadius - 1);
-    pointerFillPath.lineTo(circleCenterX, circleCenterY + circleRadius + pointerHeight - 2);
+    pointerFillPath.lineTo(
+      circleCenterX,
+      circleCenterY + circleRadius + pointerHeight - 2,
+    );
     pointerFillPath.lineTo(circleCenterX + 5, circleCenterY + circleRadius - 1);
     pointerFillPath.close();
     final pointerFillPaint = Paint()..color = AppColors.primary;
@@ -187,9 +194,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_off_rounded, size: 48, color: AppColors.textTertiary),
+            const Icon(
+              Icons.cloud_off_rounded,
+              size: 48,
+              color: AppColors.textTertiary,
+            ),
             const SizedBox(height: 12),
-            Text('Failed to load stations', style: TextStyle(color: AppColors.textSecondary)),
+            Text(
+              'Failed to load stations',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () => ref.read(stationsProvider.notifier).refresh(),
@@ -232,7 +246,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // ── Bottom sheet overlay ──
             DraggableScrollableSheet(
               controller: _sheetController,
-              initialChildSize: 0.5,
+              initialChildSize: 0.55,
               minChildSize: 0.25,
               maxChildSize: 0.75,
               builder: (context, scrollController) {
@@ -248,7 +262,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           width: 40,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: AppColors.textTertiary.withValues(alpha: 0.8),
+                            color: AppColors.textTertiary.withValues(
+                              alpha: 0.8,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
@@ -275,7 +291,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               child: StationCard(
                                 station: stations[index],
                                 onContinue: () {
-                                  Navigator.of(context, rootNavigator: true).push(
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).push(
                                     MaterialPageRoute(
                                       builder: (_) => ChargingDetailsScreen(
                                         station: stations[index],

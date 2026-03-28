@@ -62,29 +62,36 @@ class AuthNotifier extends Notifier<AuthState> {
       errorMessage: null,
     );
 
-    await _authService.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      resendToken: state.resendToken,
-      onCodeSent: (verificationId, resendToken) {
-        state = state.copyWith(
-          status: AuthStatus.codeSent,
-          verificationId: verificationId,
-          resendToken: resendToken,
-        );
-      },
-      onError: (error) {
-        state = state.copyWith(
-          status: AuthStatus.error,
-          errorMessage: error,
-        );
-      },
-      onAutoVerified: () {
-        state = state.copyWith(
-          status: AuthStatus.authenticated,
-          user: _authService.currentUser,
-        );
-      },
-    );
+    try {
+      await _authService.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        resendToken: state.resendToken,
+        onCodeSent: (verificationId, resendToken) {
+          state = state.copyWith(
+            status: AuthStatus.codeSent,
+            verificationId: verificationId,
+            resendToken: resendToken,
+          );
+        },
+        onError: (error) {
+          state = state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: error,
+          );
+        },
+        onAutoVerified: () {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: _authService.currentUser,
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: 'Failed to send OTP. Please check your connection and try again.',
+      );
+    }
   }
 
   /// Verify OTP code.
