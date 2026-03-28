@@ -30,6 +30,30 @@ class ChargingStation {
     this.plugCount = 8,
     this.imageUrl = '',
   });
+
+  /// Create a ChargingStation from a JSON map returned by the backend.
+  factory ChargingStation.fromJson(Map<String, dynamic> json) {
+    return ChargingStation(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      address: json['address'] as String,
+      hours: json['hours'] as String,
+      isOpen: json['isOpen'] as bool? ?? true,
+      location: LatLng(
+        (json['latitude'] as num).toDouble(),
+        (json['longitude'] as num).toDouble(),
+      ),
+      connectors: (json['connectors'] as List<dynamic>)
+          .map((c) => Connector.fromJson(c as Map<String, dynamic>))
+          .toList(),
+      chargePowerMin: (json['chargePowerMin'] as num?)?.toDouble() ?? 12000,
+      chargePowerMax: (json['chargePowerMax'] as num?)?.toDouble() ?? 15000,
+      distanceKm: (json['distanceKm'] as num?)?.toDouble() ?? 1.6,
+      distanceMin: (json['distanceMin'] as num?)?.toInt() ?? 12,
+      plugCount: (json['plugCount'] as num?)?.toInt() ?? 8,
+      imageUrl: json['imageUrl'] as String? ?? '',
+    );
+  }
 }
 
 class Connector {
@@ -44,9 +68,18 @@ class Connector {
     required this.type,
     required this.isAvailable,
   });
+
+  factory Connector.fromJson(Map<String, dynamic> json) {
+    return Connector(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      type: json['type'] as String,
+      isAvailable: json['isAvailable'] as bool? ?? false,
+    );
+  }
 }
 
-// Dummy data for UI demonstration
+// Dummy data kept as offline fallback
 final List<ChargingStation> dummyStations = [
   ChargingStation(
     id: '1',
@@ -61,18 +94,8 @@ final List<ChargingStation> dummyStations = [
     distanceMin: 12,
     plugCount: 8,
     connectors: const [
-      Connector(
-        id: 'c1',
-        name: 'Connector XY1',
-        type: 'Type D CCS5-2',
-        isAvailable: true,
-      ),
-      Connector(
-        id: 'c2',
-        name: 'Connector CCD6',
-        type: 'Type D CC09-2',
-        isAvailable: true,
-      ),
+      Connector(id: 'c1', name: 'Connector XY1', type: 'Type D CCS5-2', isAvailable: true),
+      Connector(id: 'c2', name: 'Connector CCD6', type: 'Type D CC09-2', isAvailable: true),
     ],
   ),
   ChargingStation(
@@ -88,18 +111,8 @@ final List<ChargingStation> dummyStations = [
     distanceMin: 18,
     plugCount: 12,
     connectors: const [
-      Connector(
-        id: 'c3',
-        name: 'Connector AB2',
-        type: 'Type 2 AC',
-        isAvailable: true,
-      ),
-      Connector(
-        id: 'c4',
-        name: 'Connector DC1',
-        type: 'CCS2 DC',
-        isAvailable: false,
-      ),
+      Connector(id: 'c3', name: 'Connector AB2', type: 'Type 2 AC', isAvailable: true),
+      Connector(id: 'c4', name: 'Connector DC1', type: 'CCS2 DC', isAvailable: false),
     ],
   ),
   ChargingStation(
@@ -115,18 +128,8 @@ final List<ChargingStation> dummyStations = [
     distanceMin: 25,
     plugCount: 6,
     connectors: const [
-      Connector(
-        id: 'c5',
-        name: 'Connector FT3',
-        type: 'Type D CCS5-2',
-        isAvailable: true,
-      ),
-      Connector(
-        id: 'c6',
-        name: 'Connector BHA-98',
-        type: 'CHAdeMO',
-        isAvailable: true,
-      ),
+      Connector(id: 'c5', name: 'Connector FT3', type: 'Type D CCS5-2', isAvailable: true),
+      Connector(id: 'c6', name: 'Connector BHA-98', type: 'CHAdeMO', isAvailable: true),
     ],
   ),
 ];

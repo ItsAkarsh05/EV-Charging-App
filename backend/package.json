@@ -1,12 +1,19 @@
 {
-  "name": "backend",
+  "name": "ev-charging-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
   },
-  "keywords": [],
+  "keywords": ["ev", "charging", "backend"],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Node.js backend for EV Charging Station app – serves dummy station data with randomized availability for polling.",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
 }
