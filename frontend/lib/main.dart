@@ -13,13 +13,13 @@ import 'features/shell/main_shell.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables from .env
+  // load env vars
   await dotenv.load(fileName: ".env");
 
-  // Lock portrait orientation
+  // portrait only
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  // Set status bar style
+  // transparent status bar
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -27,7 +27,7 @@ Future<void> main() async {
     ),
   );
 
-  // Initialize Firebase (gracefully handle misconfiguration)
+  // init Firebase
   bool firebaseReady = false;
   try {
     await Firebase.initializeApp();
@@ -36,7 +36,7 @@ Future<void> main() async {
     debugPrint('⚠️ Firebase init failed: $e');
   }
 
-  // Check onboarding and auth state
+  // check first-launch flag and login state
   bool onboardingComplete = false;
   bool isLoggedIn = false;
   try {
@@ -69,10 +69,7 @@ class EvoltSoftApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Decide initial screen:
-    // 1. First launch → Onboarding
-    // 2. Not logged in → Login
-    // 3. Logged in → MainShell (home)
+    // pick the right starting screen
     Widget home;
     if (!onboardingComplete) {
       home = const OnboardingScreen();

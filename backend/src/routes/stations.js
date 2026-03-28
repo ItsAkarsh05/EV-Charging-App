@@ -3,7 +3,7 @@ import { getStations, getStationById } from "../data/stations.js";
 
 const router = Router();
 
-// GET /api/stations — list all stations
+// list all stations
 router.get("/", (_req, res) => {
   try {
     const stations = getStations();
@@ -14,7 +14,7 @@ router.get("/", (_req, res) => {
   }
 });
 
-// GET /api/stations/:id — single station detail
+// get one station by id
 router.get("/:id", (req, res) => {
   try {
     const station = getStationById(req.params.id);

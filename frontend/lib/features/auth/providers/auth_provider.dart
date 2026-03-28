@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
 
-// ─── Auth Service Provider ─────────────────────────────────────
+// auth service provider
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 
-// ─── Auth State ────────────────────────────────────────────────
+// possible auth states
 enum AuthStatus { idle, loading, codeSent, authenticated, error }
 
 class AuthState {
@@ -44,7 +44,7 @@ class AuthState {
   }
 }
 
-// ─── Auth Notifier ─────────────────────────────────────────────
+// manages login/OTP state transitions
 class AuthNotifier extends Notifier<AuthState> {
   late final AuthService _authService;
 
@@ -54,7 +54,7 @@ class AuthNotifier extends Notifier<AuthState> {
     return const AuthState();
   }
 
-  /// Send OTP to the provided phone number.
+  // send OTP to the given phone number
   Future<void> sendOTP(String phoneNumber) async {
     state = state.copyWith(
       status: AuthStatus.loading,
@@ -94,7 +94,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  /// Verify OTP code.
+  // verify the OTP the user typed
   Future<void> verifyOTP(String otp) async {
     if (state.verificationId == null) return;
 
@@ -125,19 +125,19 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  /// Resend OTP to the same phone number.
+  // resend OTP to the same number
   Future<void> resendOTP() async {
     if (state.phoneNumber == null) return;
     await sendOTP(state.phoneNumber!);
   }
 
-  /// Reset state (used on sign-out or going back).
+  // reset back to initial (used on logout or back navigation)
   void reset() {
     state = const AuthState();
   }
 }
 
-// ─── Auth Notifier Provider ────────────────────────────────────
+// the global auth provider
 final authProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );

@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/station_data.dart';
 
-/// HTTP client that fetches charging station data from the Node.js backend.
+// talks to the Node.js backend for station data
 class StationService {
-  // ── Backend URL ───────────────────────────────────────────────
-  // Run: adb reverse tcp:3000 tcp:3000  →  then localhost works on any device
-  // static const String _baseUrl = 'http://10.0.2.2:3000/api';      // emulator only
-  // static const String _baseUrl = 'http://192.168.29.86:3000/api'; // same-WiFi device
-  static const String _baseUrl = 'http://localhost:3000/api';         // adb reverse
+  // change this depending on where you're running the app:
+  // static const String _baseUrl = 'http://10.0.2.2:3000/api';       // emulator
+  // static const String _baseUrl = 'http://192.168.29.86:3000/api';  // same-WiFi device
+  // adb reverse tcp:3000 tcp:3000 → then localhost just works
+  static const String _baseUrl = 'http://localhost:3000/api';
 
   static const Duration _timeout = Duration(seconds: 10);
 
@@ -18,7 +18,7 @@ class StationService {
 
   StationService({http.Client? client}) : _client = client ?? http.Client();
 
-  /// Fetch all charging stations.
+  // fetch all stations
   Future<List<ChargingStation>> fetchStations() async {
     try {
       final response = await _client
@@ -42,19 +42,18 @@ class StationService {
           .map((j) => ChargingStation.fromJson(j as Map<String, dynamic>))
           .toList();
     } on SocketException catch (e) {
-      debugPrint('Network error fetching stations: $e');
+      debugPrint('Network error: $e');
       throw Exception('Cannot reach the server. Check your connection.');
     } on HttpException catch (e) {
-      debugPrint('HTTP error fetching stations: $e');
+      debugPrint('HTTP error: $e');
       throw Exception('Server error: ${e.message}');
     } on FormatException catch (e) {
-      debugPrint('Parse error fetching stations: $e');
+      debugPrint('Parse error: $e');
       throw Exception('Invalid response from server.');
     }
-    // TimeoutException and other errors propagate naturally
   }
 
-  /// Fetch a single station by [id] (used for polling).
+  // fetch a single station by id (used for polling)
   Future<ChargingStation> fetchStationById(String id) async {
     try {
       final response = await _client
@@ -79,13 +78,13 @@ class StationService {
 
       return ChargingStation.fromJson(data);
     } on SocketException catch (e) {
-      debugPrint('Network error fetching station $id: $e');
+      debugPrint('Network error: $e');
       throw Exception('Cannot reach the server. Check your connection.');
     } on HttpException catch (e) {
-      debugPrint('HTTP error fetching station $id: $e');
+      debugPrint('HTTP error: $e');
       throw Exception('Server error: ${e.message}');
     } on FormatException catch (e) {
-      debugPrint('Parse error fetching station $id: $e');
+      debugPrint('Parse error: $e');
       throw Exception('Invalid response from server.');
     }
   }

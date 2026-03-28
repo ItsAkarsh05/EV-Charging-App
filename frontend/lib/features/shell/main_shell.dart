@@ -46,7 +46,7 @@ class MainShell extends ConsumerWidget {
               ),
             ),
             onPressed: () {
-              // TODO: search
+              // TODO: open search
             },
           ),
           IconButton(
@@ -64,7 +64,7 @@ class MainShell extends ConsumerWidget {
               ),
             ),
             onPressed: () {
-              // TODO: notifications
+              // TODO: open notifications
             },
           ),
           IconButton(
@@ -74,7 +74,7 @@ class MainShell extends ConsumerWidget {
               size: 20,
             ),
             onPressed: () async {
-              // Sign out from Firebase first, then reset local state
+              // sign out and clear local state
               await FirebaseAuth.instance.signOut();
               ref.read(authProvider.notifier).reset();
               if (context.mounted) {

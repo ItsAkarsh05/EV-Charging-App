@@ -36,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    // Marker dimensions
+    // marker size
     const double markerWidth = 56;
     const double markerHeight = 68;
     const double circleRadius = 22;
@@ -44,7 +44,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     const double circleCenterY = 26;
     const double pointerHeight = 8;
 
-    // ── Shadow beneath circle ──
+    // shadow
     final shadowPaint = Paint()
       ..color = const Color(0x30000000)
       ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 3);
@@ -54,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       shadowPaint,
     );
 
-    // ── White outer ring ──
+    // white border ring
     final outerRingPaint = Paint()..color = Colors.white;
     canvas.drawCircle(
       Offset(circleCenterX, circleCenterY),
@@ -62,7 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       outerRingPaint,
     );
 
-    // ── Gradient filled circle ──
+    // gradient-filled circle
     final gradientPaint = Paint()
       ..shader = ui.Gradient.radial(
         Offset(circleCenterX - 4, circleCenterY - 5),
@@ -80,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       gradientPaint,
     );
 
-    // ── Bottom pointer triangle ──
+    // pointer triangle at the bottom
     final pointerPath = Path();
     pointerPath.moveTo(circleCenterX - 7, circleCenterY + circleRadius - 2);
     pointerPath.lineTo(
@@ -96,7 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ..style = PaintingStyle.fill;
     canvas.drawPath(pointerPath, pointerBorderPaint);
 
-    // Green fill for pointer (slightly inset)
+    // green fill inside the pointer
     final pointerFillPath = Path();
     pointerFillPath.moveTo(circleCenterX - 5, circleCenterY + circleRadius - 1);
     pointerFillPath.lineTo(
@@ -108,13 +108,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final pointerFillPaint = Paint()..color = AppColors.primary;
     canvas.drawPath(pointerFillPath, pointerFillPaint);
 
-    // ── Lightning bolt icon (crisp & centered) ──
+    // bolt icon
     final iconPaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.fill;
 
+    // draw the bolt shape
     final boltPath = Path();
-    // Well-proportioned bolt centered in circle
     const double bx = circleCenterX;
     const double by = circleCenterY;
     boltPath.moveTo(bx + 1, by - 10);
@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _mapController?.animateCamera(
             CameraUpdate.newLatLng(station.location),
           );
-          // Expand the bottom sheet so the station card is visible
+          // expand sheet so the card is visible
           if (_sheetController.isAttached && _sheetController.size < 0.5) {
             _sheetController.animateTo(
               0.5,
@@ -213,17 +213,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       data: (stations) {
-        // Make sure index is in bounds
+        // bounds check
         if (_selectedStationIndex >= stations.length) {
           _selectedStationIndex = 0;
         }
-        // Build markers from fetched data
+        // build markers
         _buildMarkers(stations);
         final selectedStation = stations[_selectedStationIndex];
 
         return Stack(
           children: [
-            // ── Google Map ──
+            // map
             GoogleMap(
               initialCameraPosition: const CameraPosition(
                 target: LatLng(28.6139, 77.2090),
@@ -243,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
 
-            // ── Bottom sheet overlay ──
+            // draggable sheet
             DraggableScrollableSheet(
               controller: _sheetController,
               initialChildSize: 0.55,
@@ -255,7 +255,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     controller: scrollController,
                     padding: EdgeInsets.zero,
                     children: [
-                      // Drag handle
+                      // drag handle
                       Center(
                         child: Container(
                           margin: const EdgeInsets.only(top: 10, bottom: 8),
@@ -270,7 +270,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
 
-                      // Horizontally scrollable station cards
+                      // station cards
                       SizedBox(
                         height: 218,
                         child: PageView.builder(
@@ -309,7 +309,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
 
-                      // Connector list for selected station
+                      // connector list for selected station
                       Container(
                         decoration: const BoxDecoration(
                           color: AppColors.surface,

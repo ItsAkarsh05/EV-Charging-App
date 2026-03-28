@@ -8,8 +8,7 @@ class AuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  /// Send OTP to the given phone number.
-  /// Returns a map containing the verificationId and resendToken on codeSent.
+  // trigger Firebase phone verification
   Future<void> verifyPhoneNumber({
     required String phoneNumber,
     required void Function(String verificationId, int? resendToken) onCodeSent,
@@ -22,7 +21,7 @@ class AuthService {
       forceResendingToken: resendToken,
       timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto sign-in on Android
+        // auto sign-in on Android
         await _auth.signInWithCredential(credential);
         onAutoVerified();
       },
@@ -34,12 +33,12 @@ class AuthService {
         onCodeSent(verificationId, resendToken);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        // Auto-retrieval timed out
+        // auto-retrieval timed out, user types manually
       },
     );
   }
 
-  /// Verify the OTP entered by the user.
+  // verify OTP and sign in
   Future<UserCredential> verifyOTP({
     required String verificationId,
     required String otp,
@@ -51,7 +50,7 @@ class AuthService {
     return await _auth.signInWithCredential(credential);
   }
 
-  /// Sign out the current user.
+  // sign out
   Future<void> signOut() async {
     await _auth.signOut();
   }

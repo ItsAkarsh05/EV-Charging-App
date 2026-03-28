@@ -5,7 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../auth/screens/login_screen.dart';
 
-/// Data class for each onboarding page.
+// data for each onboarding page
 class _OnboardingPage {
   final String title;
   final String subtitle;
@@ -34,7 +34,7 @@ class _FloatingIcon {
   });
 }
 
-// ─── Onboarding data ──────────────────────────────────────────────
+// onboarding page data
 final _pages = [
   _OnboardingPage(
     title: 'Find Charging\nStations Nearby',
@@ -74,9 +74,7 @@ final _pages = [
   ),
 ];
 
-// ═══════════════════════════════════════════════════════════════════
-// Onboarding Screen
-// ═══════════════════════════════════════════════════════════════════
+// onboarding screen
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -145,7 +143,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       body: SafeArea(
         child: Column(
           children: [
-            // ── Skip button ──
+            // skip button
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
@@ -162,7 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               ),
             ),
 
-            // ── Page content ──
+            // pages (swipeable)
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -180,7 +178,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               ),
             ),
 
-            // ── Dot indicators ──
+            // dot indicators
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
               child: Row(
@@ -203,7 +201,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               ),
             ),
 
-            // ── CTA button ──
+            // next / get started button
             Padding(
               padding: const EdgeInsets.fromLTRB(28, 0, 28, 36),
               child: SizedBox(
@@ -253,9 +251,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// Single onboarding page content
-// ═══════════════════════════════════════════════════════════════════
+// single onboarding page
 class _OnboardingPageView extends StatelessWidget {
   final _OnboardingPage page;
   final Animation<double> heroScale;
@@ -277,7 +273,7 @@ class _OnboardingPageView extends StatelessWidget {
         children: [
           const Spacer(flex: 1),
 
-          // ── Hero illustration area ──
+          // hero illustration
           FadeTransition(
             opacity: heroFade,
             child: ScaleTransition(
@@ -288,7 +284,7 @@ class _OnboardingPageView extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Background circle glow
+                    // background glow
                     Container(
                       width: 220,
                       height: 220,
@@ -305,7 +301,7 @@ class _OnboardingPageView extends StatelessWidget {
                       ),
                     ),
 
-                    // Inner circle with icon
+                    // icon circle
                     Container(
                       width: 140,
                       height: 140,
@@ -331,7 +327,7 @@ class _OnboardingPageView extends StatelessWidget {
                       ),
                     ),
 
-                    // Outer dashed ring (simulated with dots)
+                    // ring dots
                     ...List.generate(12, (i) {
                       final angle = (i * 30) * (pi / 180);
                       const radius = 120.0;
@@ -356,7 +352,7 @@ class _OnboardingPageView extends StatelessWidget {
                       );
                     }),
 
-                    // Floating accent icons
+                    // floating accent icons
                     ...page.floatingIcons.map((fi) {
                       return Positioned(
                         top: screenSize.height * 0.38 * fi.top,
@@ -372,7 +368,7 @@ class _OnboardingPageView extends StatelessWidget {
 
           const Spacer(flex: 1),
 
-          // ── Title ──
+          // title
           Text(
             page.title,
             textAlign: TextAlign.center,
@@ -382,7 +378,7 @@ class _OnboardingPageView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // ── Subtitle ──
+          // subtitle
           Text(
             page.subtitle,
             textAlign: TextAlign.center,
@@ -399,9 +395,7 @@ class _OnboardingPageView extends StatelessWidget {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// Floating icon with subtle pulse animation
-// ═══════════════════════════════════════════════════════════════════
+// floating icon with pulse animation
 class _FloatingIconWidget extends StatefulWidget {
   final _FloatingIcon data;
   const _FloatingIconWidget({required this.data});

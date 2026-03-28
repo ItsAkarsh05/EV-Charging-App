@@ -81,7 +81,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Scrollable content ──
+            // scrollable content
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -167,7 +167,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
               ),
             ),
 
-            // ── Get directions button pinned at bottom ──
+            // directions button pinned at bottom
             _buildGetDirectionsButton(),
           ],
         ),
@@ -175,9 +175,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Back button
-  // ────────────────────────────────────────────────────────────
+  // back button
   Widget _buildBackButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -205,9 +203,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Station header (name + address + status badge)
-  // ────────────────────────────────────────────────────────────
+  // station header (name, address, open/closed badge)
   Widget _buildStationHeader(ChargingStation station) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -258,9 +254,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Image carousel with dot indicators
-  // ────────────────────────────────────────────────────────────
+  // image carousel with dot indicators
   Widget _buildImageCarousel() {
     return Column(
       children: [
@@ -323,9 +317,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Facilities Available section
-  // ────────────────────────────────────────────────────────────
+  // facilities section
   Widget _buildFacilitiesSection(ChargingStation station) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -374,9 +366,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Connectors section (live-updated via polling)
-  // ────────────────────────────────────────────────────────────
+  // connectors section — updates live via polling
   Widget _buildConnectorsSection(ChargingStation station) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -398,9 +388,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Get directions button
-  // ────────────────────────────────────────────────────────────
+  // get directions button
   Widget _buildGetDirectionsButton() {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
@@ -409,7 +397,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
         height: 52,
         child: ElevatedButton(
           onPressed: () {
-            // TODO: launch maps / directions
+            // TODO: launch maps
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
@@ -430,9 +418,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
     );
   }
 
-  // ────────────────────────────────────────────────────────────
-  // Helpers
-  // ────────────────────────────────────────────────────────────
+  // helpers
   String _formatPower(double volts) {
     if (volts >= 1000) {
       final formatted = (volts / 1000).toStringAsFixed(3);
@@ -458,9 +444,7 @@ class _ChargingDetailsScreenState extends ConsumerState<ChargingDetailsScreen> {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-// Facility Row widget
-// ══════════════════════════════════════════════════════════════
+// facility row widget
 class _FacilityRow extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
@@ -518,9 +502,7 @@ class _FacilityRow extends StatelessWidget {
   }
 }
 
-// ══════════════════════════════════════════════════════════════
-// Connector Row widget (shows live availability)
-// ══════════════════════════════════════════════════════════════
+// connector row — shows live availability badge
 class _ConnectorRow extends StatelessWidget {
   final Connector connector;
 
