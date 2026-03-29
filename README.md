@@ -12,7 +12,7 @@ A Flutter mobile application for discovering and navigating EV charging stations
 - **Live Connector Status** — Polling every 30s to refresh connector availability on the details screen
 - **Node.js Backend** — REST API for station data with randomised availability to simulate real-world updates
 - **Riverpod State Management** — Auth state, station list, and station detail providers
-- **Offline Fallback** — Loads hardcoded dummy stations if the backend is unreachable
+- **Error Handling** — Clear UI feedback and connection status when the backend is unreachable
 
 ---
 
@@ -32,7 +32,7 @@ ev-charging-app/
             ├── auth/      # Login, OTP, Firebase auth service, Riverpod provider
             ├── home/      # Map, station cards, charging details, station service
             ├── onboarding/# 3-page onboarding flow
-            └── shell/     # Persistent bottom navigation bar shell
+            └── navigation/# Persistent bottom navigation bar frame
 ```
 
 ---
@@ -74,7 +74,15 @@ Create `frontend/.env`:
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 ```
 
-Get a Maps API key from [Google Cloud Console](https://console.cloud.google.com) with the **Maps SDK for Android** enabled.
+**How to get a Google Maps API Key:**
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a new project or select an existing one.
+3. Search for **"Maps SDK for Android"** (and "Maps SDK for iOS" if you are building for iOS) in the search bar and click on it.
+4. Click the **Enable** button to enable the API for your project.
+5. In the left navigation pane, go to **APIs & Services > Credentials**.
+6. Click on **+ CREATE CREDENTIALS** and select **API key**.
+7. Copy the generated API key and paste it into your `frontend/.env` file.
+*(Optional but recommended):* Restrict the API key to your Android app using its package name and SHA-1 certificate fingerprint to prevent unauthorized use.
 
 ---
 
@@ -137,6 +145,16 @@ flutter run
 | **Charger Discovery** | Full-screen map with custom markers, draggable station card list |
 | **Charger Details** | Station info, image carousel, connector list with live polling every 30s |
 
+
+---
+
+## 🧪 Test Credentials
+
+Since Firebase Phone OTP limits free tier usage, the project is configured with a dummy testing number:
+
+- **Phone Number:** `+91 9090909090`
+- **OTP:** `121212`
+
 ---
 
 ## 🔧 State Management
@@ -146,7 +164,7 @@ flutter run
 | Provider | Type | Purpose |
 |----------|------|---------|
 | `authProvider` | `NotifierProvider` | Manages auth state (idle, loading, codeSent, authenticated, error) |
-| `stationsProvider` | `AsyncNotifierProvider` | Fetches station list, with dummy data fallback |
+| `stationsProvider` | `AsyncNotifierProvider` | Fetches station list from backend API |
 | `stationDetailProvider` | `FutureProvider.family` | Fetches individual station for polling |
 | `stationServiceProvider` | `Provider` | HTTP client singleton with auto-dispose |
 
@@ -171,7 +189,7 @@ flutter run
 
 - Phone Auth requires a **real device or properly configured emulator** with Google Play Services
 - Backend uses randomised availability data to simulate real-world charger state changes
-- The app gracefully falls back to offline dummy data if the backend is unreachable
+- The app correctly reports live connection losses and network errors directly to the user
 - First launch shows onboarding; subsequent launches go directly to Login or Home based on session
 
 ---

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../providers/auth_provider.dart';
-import '../../shell/main_shell.dart';
+import '../../navigation/main_navigator.dart';
 
 class OTPScreen extends ConsumerStatefulWidget {
   const OTPScreen({super.key});
@@ -106,7 +106,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen>
         );
         // Navigate to home screen
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const MainShell()),
+          MaterialPageRoute(builder: (_) => const MainNavigator()),
           (route) => false,
         );
       }

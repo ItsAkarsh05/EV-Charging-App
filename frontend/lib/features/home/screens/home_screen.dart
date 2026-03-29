@@ -201,7 +201,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Failed to load stations',
+              err.toString().replaceAll('Exception: ', ''),
+              textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 8),

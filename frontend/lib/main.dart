@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
-import 'features/shell/main_shell.dart';
+import 'features/navigation/main_navigator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +74,7 @@ class EvoltSoftApp extends StatelessWidget {
     if (!onboardingComplete) {
       home = const OnboardingScreen();
     } else if (isLoggedIn) {
-      home = const MainShell();
+      home = const MainNavigator();
     } else {
       home = const LoginScreen();
     }

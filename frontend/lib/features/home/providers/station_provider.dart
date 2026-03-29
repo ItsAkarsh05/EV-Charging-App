@@ -9,7 +9,7 @@ final stationServiceProvider = Provider<StationService>((ref) {
   return service;
 });
 
-// fetches all stations; falls back to dummy data if backend is down
+// fetches all stations from the backend
 final stationsProvider =
     AsyncNotifierProvider<StationsNotifier, List<ChargingStation>>(
   StationsNotifier.new,
@@ -21,12 +21,7 @@ class StationsNotifier extends AsyncNotifier<List<ChargingStation>> {
 
   Future<List<ChargingStation>> _fetch() async {
     final service = ref.read(stationServiceProvider);
-    try {
-      return await service.fetchStations();
-    } catch (_) {
-      // backend unreachable — use hardcoded fallback
-      return dummyStations;
-    }
+    return await service.fetchStations();
   }
 
   // manually trigger a refresh
